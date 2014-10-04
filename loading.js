@@ -7,9 +7,11 @@
 	To optimize resources, the tooltips only change when the players (not GM) are viewing the page
 */
 
-	var displaySpeed = 10000;		//Sets speed (in milleseconds) at which to cycle tips
-	var numChars = 35; 				//Set maximum number of characters per line
-	var targetPageName = "Loading";
+	var displaySpeed = 10000;			//Sets speed (in milleseconds) at which to cycle tips
+	var numChars = 35; 					//Set maximum number of characters per line
+	var targetPageName = "Loading"; 	//The name of the page you want to use for your loading screen
+	var onlyChangeIfVisible = false;	//Only rotates tips when players are on Loading screen
+	var debug = true;					//Enables debugging messages
 	
 	var tips = [
 		"When the DM asks you 'Really? Are you sure?', you say 'NO.'",
@@ -129,31 +131,38 @@ function fixNewObject(obj)
 
 on("ready", function(obj) {
     
+	var loadingPage;
 	// Warn user that there is no page
 	if( findObjs({_type: "page",name: targetPageName}).length == 0){
 		log("Warning! No Page named '"+targetPageName+"' exists, create one for this script to work");
 		return;
 	}
+	else{
+		loadingPage = findObjs({_type: "page",name: targetPageName})[0];
+	}
 
 	//Update the loading screen with a new tip (requires players to be viewing page)
 	var UpdateWithNewTip = function() { 
-		var currentPage = getObj("page", Campaign().get("playerpageid"));
 	
-		if(currentPage.get("name") != targetPageName) return;
+		//Change Tip only if Red player marker is on Loading Page
+		if(onlyChangeIfVisible && getObj("page", Campaign().get("playerpageid")).get("name") != targetPageName) return;
+		else if(debug) log("Players not on "+targetPageName);
 		
 		var textObjects = findObjs({
 			_type: "text",
-			_pageid: currentPage.get("_id"),
+			_pageid: loadingPage.get("_id"),
 			layer: "objects"
 		});
 	
-		log(textObjects);
+		if(debug) log("Text Objects on page");
+		if(debug) log(textObjects);
 		
 		//Find First text field or create one if none exists
 		var text;
 		if(textObjects.length == 0){
+			if(debug) log("Create New Text Box");
 			text = createObj("text", {
-				_pageid: currentPage.get("_id"),
+				_pageid: loadingPage.get("_id"),
 				left: 650, 
 				top: 255, 
 				width: 200, 
@@ -166,6 +175,7 @@ on("ready", function(obj) {
 			text = fixNewObject(text);
 		}
 		else{
+			if(debug) log("Text Box Already Exists");
 			text = textObjects[0];
 		}
 	
@@ -188,7 +198,7 @@ on("ready", function(obj) {
         formattedText=formattedLines.join("\n");
 		
 		text.set("text", formattedText);
-		log( "new tip: "+ text.get("text"));
+		if(debug) log( "new tip: "+ text.get("text"));
 	}
  
     UpdateWithNewTip();

@@ -1,13 +1,17 @@
 ﻿/*
   To use:
-  1. Create a page called "Loading"
-  2. On the object layer create a textbox
+  1. Create a page called "Loading" (you can change this in variables)
+  2. On the object layer create a textbox (will be auto created if none exists)
+  
+  Note:
+	To optimize resources, the tooltips only change when the players (not GM) are viewing the page
 */
-on("ready", function(obj) {
-    
-	var displaySpeed = 10000;
-	var numChars = 35;
-    var tips = [
+
+	var displaySpeed = 10000;		//Sets speed (in milleseconds) at which to cycle tips
+	var numChars = 35; 				//Set maximum number of characters per line
+	var targetPageName = "Loading";
+	
+	var tips = [
 		"When the DM asks you 'Really? Are you sure?', you say 'NO.'",
 		"Use perception checks often. Or get stabbed in the back. Up to you.",
 		"Slower travel is safer travel. Moving faster leaves you more open to random encounters.",
@@ -111,40 +115,82 @@ on("ready", function(obj) {
 		"A prone creature has disadvantage on attack rolls.",
 		"An attack roll against a prone creature has advantage if the attacker is within 5 feet of the creature. Otherwise, the attack roll has disadvantage."
     ];
-
 	
+// 
+// Don't edit bellow this line if you know what you are doing
+// ------------------------------------------------------	
+function fixNewObject(obj)
+{
+    var p = obj.changed._fbpath;
+    var new_p = p.replace(/([^\/]*\/){4}/, "/");
+    obj.fbpath = new_p;
+    return obj;
+}
 
+on("ready", function(obj) {
+    
+	// Warn user that there is no page
+	if( findObjs({_type: "page",name: targetPageName}).length == 0){
+		log("Warning! No Page named '"+targetPageName+"' exists, create one for this script to work");
+		return;
+	}
 
-
-	 setInterval(function() {
-	 
+	//Update the loading screen with a new tip (requires players to be viewing page)
+	var UpdateWithNewTip = function() { 
 		var currentPage = getObj("page", Campaign().get("playerpageid"));
-		var pageName = currentPage.get("name");
+	
+		if(currentPage.get("name") != targetPageName) return;
 		
-		if(pageName != "Loading") return;
-		
-		var text = findObjs({
+		var textObjects = findObjs({
 			_type: "text",
 			_pageid: currentPage.get("_id"),
 			layer: "objects"
-		})[0];
+		});
 	
-     	var pickone = Math.floor(Math.random()*tips.length);
-
-		var countChars = 0;
-		var formatedText = "";
-		for (i = 0; i < tips[pickone].length; i++) { 
-			formatedText += tips[pickone].charAt(i);
-			
-			if(tips[pickone].charAt(i) == " " && countChars > numChars){
-				formatedText += "\n";
-				countChars = 0;
-			}
-			countChars++;
-		}
+		log(textObjects);
 		
-		text.set("text", formatedText);
+		//Find First text field or create one if none exists
+		var text;
+		if(textObjects.length == 0){
+			text = createObj("text", {
+				_pageid: currentPage.get("_id"),
+				left: 650, 
+				top: 255, 
+				width: 200, 
+				height: 200, 
+				font_size: 56,
+				text: "Loading...",
+				layer: "objects"
+			});
+			
+			text = fixNewObject(text);
+		}
+		else{
+			text = textObjects[0];
+		}
+	
+     	var pickone = randomInteger(tips.length) - 1;
+
+		var formattedText;
+        var formattedLines = [];
+        _.each(tips[pickone].split(/\n/),function(l){
+            formattedText = '';
+            _.each(l.split(''),function(c){
+                if(formattedText.length > numChars && ' ' === c) {
+                    formattedLines.push(formattedText);
+                    formattedText = '';                       
+                } else {
+                    formattedText += c;
+                }
+            });
+            formattedLines.push(formattedText);
+        });
+        formattedText=formattedLines.join("\n");
+		
+		text.set("text", formattedText);
 		log( "new tip: "+ text.get("text"));
-	}, displaySpeed); //take an action every 5 seconds
-   
+	}
+ 
+    UpdateWithNewTip();
+    setInterval( UpdateWithNewTip, displaySpeed); //take an action every ___ seconds   
 });

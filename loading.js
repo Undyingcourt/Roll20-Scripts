@@ -24,11 +24,11 @@
 		"Roleplaying your character might net you Inspiration points – which are very useful.",
 		"All the coins are multiples of 10 of each other. Except for Electrum, which no one uses anyway.",
 		"To use a spell, you must expend a slot of its level or higher. Cantrips are free.",
-		"If the campaign is getting too serious for you,why not start truble at the tavern.",
+		"If the campaign is getting too serious for you, why not start trouble at the tavern.",
 		"Vulnerability means double damage. Resistance means half damage.",
 		"On a 1 you fumble an attack, you automatically miss, and maybe even hurt yourself.",
 		"On a 20 you crit an attack, roll twice for damage before adding your modifiers.",
-		"This is a tabletop game, not Skyrim. For the love of God, think outside the box.",
+		"This is a tabletop game, not Skyrim. For the love of Tiamat, think outside the box.",
 		"Whenever you divide a number in the game, round down!",
 		"If circumstances cause a roll to have both advantage and disadvantage, you are considered to have neither of them.",
 		"If multiple circumstances impose disadvantage and only one grants advantage you still have neither advantage nor disadvantage.",
@@ -51,9 +51,9 @@
 		"In a lightly obscured area, creatures have disadvantage on Perception checks that rely on sight.",
 		"In a heavily obscured area, creatures effectively suffer from the blinded condition.",
 		"A creature with blindsight can perceive its surroundings without relying on sight,",
-		"A creature with truesight can, sees in normal and magical darkness, see invisible objects, automatically detect visual illusions and succeed on saving throws against them, and perceive the original form of a creature that is transformed by magic.",
+		"A creature with truesight can see in normal and magical darkness, see invisible objects, automatically detect visual illusions and succeed on saving throws against them, and perceive the original form of a creature that is transformed by magic.",
 		"A character can spend one or more Hit Dice at the end of a short rest",
-		"short rest is a period of downtime, at least 1 hour long, during which a character does nothing more strenuous than eating, drinking, reading, and tending to wounds.",
+		"Short rest is a period of downtime, at least 1 hour long, during which a character does nothing more strenuous than eating, drinking, reading, and tending to wounds.",
 		"At the end of a long rest, a character regains all lost hit points. The character also regains spent Hit Dice, up 1/2 of the character’s total.",
 		"You can use downtime between adventures to recover from a debilitating injury, disease, or poison.",
 		"The time between adventures is a great chance to perform research, gaining insight into mysteries that have unfurled over the course of the campaign.",
@@ -68,10 +68,10 @@
 		"Creature can squeeze through a space that is large enough for a creature one size smaller than it.",
 		"When you take the Dash action, you gain extra movement for the current turn. The increase equals your speed, after applying any modifiers.",
 		"If you take the Disengage action, your movement doesn’t provoke opportunity attacks for the rest of the turn.",
-		"When you take the Dodge action, until the start of your next turn, any attacks against you has disadvantage, make Dexterity saving throws with advantage.",
+		"When you take the Dodge action, until the start of your next turn, any attack against you has disadvantage, make Dexterity saving throws with advantage.",
 		"When you attack a target that you can’t see, you have disadvantage on the attack roll.",
 		"When a creature can’t see you, you have advantage on attack rolls against it.",
-		"You add your proficiency bonus to your attack roll when you attack using a weapon withwhich you have proficiency",
+		"You add your proficiency bonus to your attack roll when you attack using a weapon with which you have proficiency",
 		"Ranged attacks have disadvantage on the attack rolls if you are within 5 feet of a hostile creature who can see you",
 		"Your attack roll has disadvantage when your target is beyond normal range.",
 		"A target with half cover has a +2 bonus to AC and Dexterity saving throws.",
@@ -107,7 +107,7 @@
 		"The DC to resist one of your spells equals 8 + your spellcasting ability modifier + your proficiency bonus + any special modifiers.",
 		"Your attack bonus with a spell attack equals your spellcasting ability modifier + your proficiency bonus.",
 		"The effects of the same spell cast multiple times don’t combine.",
-		"A blinded fails checks that requires sight. Attack rolls against the creature have advantage, and the creature’s attack rolls have disadvantage.",
+		"A blinded creature fails checks that require sight. Attack rolls against the creature have advantage, and the creature’s attack rolls have disadvantage.",
 		"A charmed creature can’t attack the charmer. The charmer has advantage on any ability check to interact socially with the creature.",
 		"A deafened creature can’t hear and automatically fails any ability check that requires hearing.",
 		"A frightened creature has disadvantage on ability checks and attack rolls while the source of its fear is within line of sight. It can’t willingly move closer to the source of its fear.",
@@ -119,7 +119,7 @@
     ];
 	
 // 
-// Don't edit bellow this line if you know what you are doing
+// Don't edit bellow this line if you don't know what you are doing
 // ------------------------------------------------------	
 function fixNewObject(obj)
 {

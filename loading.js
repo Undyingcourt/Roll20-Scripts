@@ -1,4 +1,11 @@
 ﻿/*
+  Roll 20 - Script 
+  
+  Title:	DnD 5e Tips Based Loading Page
+  Author:	Michael Nekrasov
+  Description:
+	Creates a page to drop players on to that gives helpful tips while DM sets up a map
+  
   To use:
   1. Create a page called "Loading" (you can change this in variables)
   2. On the object layer create a textbox (will be auto created if none exists)

@@ -1,4 +1,16 @@
-﻿// Roll 20 Script
+﻿/*
+	Roll 20 - Script 
+  
+	Title:		PC/NPC Switch
+	Author:		Michael Nekrasov
+	Description:
+		Sets status to bloodied/dead based on HP 
+		
+	How to Use:
+		When writing macros can use
+		!pc to specify macro to trigger when selected token is controled by pc
+		!npc to specify macro to trigger when selected token is not controled by pc
+*/
 function escapeRegExp(string) {
     return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }

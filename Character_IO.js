@@ -22,7 +22,7 @@
 	
 */
 
-var IO_Mode = 0
+var IO_Mode = 2
 // 0:		Off
 // 1:		Export
 // 2:		Import
@@ -36,6 +36,8 @@ var importedJSON = {}
 // ------------------------------------------
 var IO_Version = 1.0
 
+var handleNotes = false; //Warning can produce too much data for API
+
 on("ready", function() {
 	if( IO_Mode == 1)	
 		exportAll()
@@ -47,6 +49,7 @@ function exportAll(){
 	var exported = {version: IO_Version, characters:[]}
 	var characters = findObjs({_type: "character"})
 
+	
 	for(var i in characters) {
 		c = characters[i]
 		e = exportChar(c)
@@ -55,6 +58,7 @@ function exportAll(){
 			exported.characters.push(e)
 	}
    
+ 
 	var checkIfComplete = setInterval(function(){ 
 		numReady = 0;
 		
@@ -69,11 +73,13 @@ function exportAll(){
 			log("Export complete")
 			log("---- COPY the following LINE ----")
 			log( exported )
+			log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
 			return
 		}
 		
 		log("Exported "+numReady+" of "+exportedChar.length)
 	},1000)
+
 	
 	function exportChar( character){
 		var exported = {};
@@ -88,16 +94,18 @@ function exportAll(){
 		exported.abilities = exportAbilities(character.get("_id"));
 		exported.attributes = exportAttributes(character.get("_id"));
 		
-		exported.pending = true
-		
-		character.get("bio", function(bio){
-			exported.bio = bio
-			character.get("gmnotes", function(gmnotes){
-				exported.gmnotes = gmnotes
-				delete exported["pending"]
-				log("Exported: "+exported.name);
-			})
-		})	
+		if(handleNotes){
+			exported.pending = true
+			
+			character.get("bio", function(bio){
+				exported.bio = bio
+				character.get("gmnotes", function(gmnotes){
+					exported.gmnotes = gmnotes
+					delete exported["pending"]
+					log("Exported: "+exported.name);
+				})
+			})	
+		}
 		return exported;
 	}
 
@@ -148,23 +156,40 @@ function importAll(){
 	}
 	
 	var characters = importedJSON.characters
+		
+	log("Starting Import of "+characters.length+" characters");
 	
-	for(var i in characters) {
-		processChar(characters[i])
-	}
-	
-	log("----")
-	log("Import Complete!") 
+	numImported = 0;
+	var checkIfComplete = setInterval(function(){ 
+
+		if(numImported >= characters.length){
+			clearInterval(checkIfComplete)			
+			log("----")
+			log("Import Complete!") 
+			return
+		}
+		else if(characters[numImported] === undefined){
+			log("Skipping "+numImported) 
+			numImported++
+			return;
+		}
+		
+		processChar(characters[numImported])
+		log("Import "+ (numImported+1)+" of "+characters.length+" : "+characters[numImported].name)
+		numImported++
+	},500)
 	
 	function processChar(imported){
+	
 		var character = createObj("character", {name: imported.name} );
 		
-		character.set("bio", imported.bio);
-		character.set("gmnotes", imported.gmnotes);
 		processAbilities(character.get("id"), imported.abilities)
 		processAttribute(character.get("id"), imported.attributes);
 
-		log("Imported "+imported.name) 
+		if( imported.bio !== undefined )
+			character.set("bio", imported.bio)
+		if( imported.gmnotes !== undefined )
+			character.set("gmnotes", imported.gmnotes)
 	}
 
 	function processAbilities(charID, imported){

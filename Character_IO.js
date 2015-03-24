@@ -22,7 +22,7 @@
 	
 */
 
-var IO_Mode = 2
+var IO_Mode = 0
 // 0:		Off
 // 1:		Export
 // 2:		Import

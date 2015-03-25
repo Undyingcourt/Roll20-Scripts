@@ -85,11 +85,13 @@ function exportAll(){
 		var exported = {};
 		exported.name = character.get('name');
 		
+		/*
 		//Filter npc and set CR
 		var regEx = /\s*\(CR\s*(\d+)\)/g
 		var searchCR = regEx.exec(exported.name)
 		if(searchCR == null) return;
 		exported.name = exported.name.replace(regEx, "")
+		*/
 		
 		exported.abilities = exportAbilities(character.get("_id"));
 		exported.attributes = exportAttributes(character.get("_id"));

@@ -34,10 +34,9 @@ var importedJSON = {}
 // ------------------------------------------
 // ------ Do Not Edit Bellow This Line ------ 
 // ------------------------------------------
-var IO_Version = 1.0.1
+var IO_Version = 1.0
 
 var handleNotes = false; //Warning can produce too much data for API
-var handleAbilities = false; // Turns on off Export of Abilities(Macros on Character Sheets)
 
 on("ready", function() {
 	if( IO_Mode == 1)	
@@ -113,8 +112,6 @@ function exportAll(){
 	}
 
 	function exportAbilities( charID ){
-		if(handleNotes){
-			exported.pending = true
 		var abilities = findObjs({_type: "ability", _characterid: charID}); 
 		var exported = [];
 		
@@ -128,33 +125,28 @@ function exportAll(){
 				"istokenaction": a.get("istokenaction")
 			});
 
-		}}
+		}
 		return exported;
 	}
 
-		function exportAttributes(charID) {
-  			"use strict";
-  	return findObjs({
-  		  _type: "attribute",
-  		  _characterid: charID
- 		 }).reduce((m, attr) => {
-    // _.omit filters an object by property values - in this case, it filters out properties
-    // whose values are empty strings **Code by Jakob on Roll20**
-    const data = _.omit({
-      current: attr.get('current'),
-      max: attr.get('max'),
-      name: attr.get('name'),
-         //}, x => x === ''); original 
-         //}, x => (x === '' || x === 0));
+	function exportAttributes( charID ){
+		var attributes = findObjs({_type: "attribute", _characterid: charID}); 
+		var exported = [];
+		
 
-    }, x => (x === '' || x === 0 || x === '0' || x == null));
+		for(var i in attributes)
+		{
+			a = attributes[i];
+			
+			exported.push({ 
+				"name": a.get("name"),
+				"current": a.get("current"),
+				"max": a.get("max")
+			});
 
-    // Only include an attribute in the final data set if the name is nonempty and either
-    // current or max are present
-    if ('name' in data && ('current' in data || 'max' in data)) m.push(data);
-    return m;
-  }, []);
-}
+		}
+		return exported;
+	}
 
 }
 
@@ -209,11 +201,8 @@ function importAll(){
 			var a = imported[i]
 			var aN = createObj("ability", {_characterid: charID} )
 			
-		if(a.name !== undefined)
 			aN.set("name", a.name)
-		if(a.action !== undefined)
 			aN.set("action", a.action)
-		if(a.istokenaction !== undefined)
 			aN.set("istokenaction", a.istokenaction)
 		}
 	}
@@ -225,11 +214,8 @@ function importAll(){
 			var a = imported[i]
 			var aN = createObj( "attribute", {_characterid: charID} )
 			
-		if(a.name !== undefined)
 			aN.set("name", a.name)
-		if(a.current !== undefined)
 			aN.set("current", a.current)
-		if(a.max !== undefined)
 			aN.set("max", a.max)
 		}
 	}
